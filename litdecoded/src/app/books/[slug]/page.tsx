@@ -1,143 +1,176 @@
 import { notFound } from 'next/navigation';
+import { getBookBySlug } from '@/lib/bookUtils';
+import bookList from '@/data/bookList';
+import HeroSection from '@/components/HeroSection';
+import SummarySection from '@/components/SummarySection';
+import LitDNASection from '@/components/LitDNASection';
+import CharactersSection from '@/components/CharactersSection';
+import TimelineSection from '@/components/TimelineSection';
+import OracleSection from '@/components/OracleSection';
+import ModernMirrorSection from '@/components/ModernMirrorSection';
+import { AltEndingCarousel } from '@/components/AltEndingCarousel';
+import { QuoteHighlightGallery } from '@/components/QuoteHighlightGallery';
+import WorldReferencesSection from '@/components/WorldReferencesSection';
+import InTheWorldFeed from '@/components/InTheWorldFeed';
+import { motion } from 'framer-motion';
+import OracleChatButton from '@/components/OracleChatButton';
+import { ReaderRealizationsWall } from '@/components/ReaderRealizationsWall';
+import { ThemeMapAcrossMedia } from '@/components/ThemeMapAcrossMedia';
+import { LiteraryThreadsFromOracle } from '@/components/LiteraryThreadsFromOracle';
 
-import HeroSection from '../../../components/HeroSection';
-import SummarySection from '../../../components/SummarySection';
-import ThemesSection from '../../../components/ThemesSection';
-import CharactersSection from '../../../components/CharactersSection';
-import TimelineSection from '../../../components/TimelineSection';
-import GlossarySection from '../../../components/GlossarySection';
-import VisualGallerySection from '../../../components/VisualGallerySection';
-import RelatedWorksSection from '../../../components/RelatedWorksSection';
-import QuizSection from '../../../components/QuizSection';
-import FooterCTA from '../../../components/FooterCTA';
-import WorldReferencesSection from '../../../components/WorldReferencesSection';
-import OracleSection from '../../../components/OracleSection';
-import LitDNASection from '../../../components/LitDNASection';
-import ModernMirrorCards from '../../../components/ModernMirrorCards';
-import { AltEndingCarousel } from '../../../components/AltEndingCarousel';
-import { QuoteHighlightGallery } from '../../../components/QuoteHighlightGallery';
-
-// Import book list and related data
-import bookList, { Book } from '../../../data/bookList';
-import animalFarmData, { BookData } from '../../../data/animalFarm';
-import nineteenEightyFourData from '../../../data/nineteenEightyFour';
-import hamletData from '../../../data/hamlet';
-import greatGatsbyData from '../../../data/the-great-gatsby';
-import frankensteinData from '../../../data/frankenstein';
-import janeEyreData from '../../../data/jane-eyre';
-import heartOfDarknessData from '../../../data/heart-of-darkness';
-import { getBookBySlug } from '../../../lib/bookUtils';
-
-// Create a books registry that maps slugs to data with proper typing
-const booksRegistry: Record<string, BookData> = {
-  'animal-farm': animalFarmData,
-  '1984': nineteenEightyFourData,
-  'hamlet': hamletData,
-  'the-great-gatsby': greatGatsbyData,
-  'frankenstein': frankensteinData,
-  'jane-eyre': janeEyreData,
-  'heart-of-darkness': heartOfDarknessData,
-  // We'll add more books here as they become enriched
+// Create a books registry that maps slugs to data
+const booksRegistry: Record<string, any> = {
+  'animal-farm': require('@/data/animalFarm').default,
+  '1984': require('@/data/nineteenEightyFour').default,
+  'hamlet': require('@/data/hamlet').default,
+  'the-great-gatsby': require('@/data/the-great-gatsby').default,
+  'frankenstein': require('@/data/frankenstein').default,
+  'jane-eyre': require('@/data/jane-eyre').default,
+  'heart-of-darkness': require('@/data/heart-of-darkness').default,
 };
 
-export function generateStaticParams() {
-  return bookList.map(book => ({ slug: book.slug }));
+function getBookData(slug: string) {
+  return booksRegistry[slug];
 }
 
 interface BookPageProps {
   params: {
     slug: string;
-  }
+  };
 }
 
-export default function BookPage({ params }: BookPageProps) {
-  const { slug } = params;
+export default async function BookPage({ params }: BookPageProps) {
+  // Properly handle async params
+  const slug = await Promise.resolve(params.slug);
   const book = getBookBySlug(slug, bookList);
   
   if (!book) {
     notFound();
   }
-  
-  // If book is pending, show a coming soon page
-  if (book.status === 'pending') {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-amber-50 to-white py-20">
-        <div className="container mx-auto max-w-4xl px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">{book.title}</h1>
-          <div className="w-20 h-1 bg-amber-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-700 mb-8">
-            {book.author}, {book.year}
-          </p>
-          <div className="bg-white rounded-2xl shadow-md p-10 mb-10">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Coming Soon</h2>
-            <p className="text-gray-700 mb-6">
-              We're currently working on an in-depth analysis of this literary classic. 
-              Please check back later for a detailed breakdown of themes, characters, and insights.
-            </p>
-            <div className="inline-block bg-amber-100 text-amber-800 rounded-full px-4 py-2 font-medium">
-              Analysis in Progress
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-  
-  // If book is enriched, check if we have the data
-  const bookData = booksRegistry[slug];
-  
-  if (!bookData) {
-    notFound();
-  }
+
+  const bookData = getBookData(book.slug);
 
   return (
-    <main className="min-h-screen">
-      <HeroSection
-        title={bookData.title}
-        author={bookData.author}
-        year={bookData.year}
-        genre={bookData.genre}
-        hook={bookData.hook}
-        coverImage={bookData.coverImage}
-      />
-      
-      {bookData.summary && <SummarySection summary={bookData.summary} />}
-      
-      {bookData.themes && bookData.themes.length > 0 && <ThemesSection themes={bookData.themes} />}
-      
-      {bookData.characters && bookData.characters.length > 0 && <CharactersSection characters={bookData.characters} />}
-      
-      {bookData.timeline && bookData.timeline.length > 0 && <TimelineSection events={bookData.timeline} bookTitle={bookData.title} />}
-      
-      {bookData.glossaryTerms && bookData.glossaryTerms.length > 0 && <GlossarySection terms={bookData.glossaryTerms} />}
-      
-      {bookData.visualQuotes && bookData.visualQuotes.length > 0 && <VisualGallerySection quotes={bookData.visualQuotes} />}
-      
-      {bookData.modernMirror && bookData.modernMirror.length > 0 && 
-        <ModernMirrorCards modernMirror={bookData.modernMirror} bookTitle={bookData.title} />
-      }
-      
-      {bookData.quoteHighlights && bookData.quoteHighlights.length > 0 && 
-        <QuoteHighlightGallery data={bookData.quoteHighlights} bookTitle={bookData.title} />
-      }
-      
-      {bookData.altEndings && bookData.altEndings.length > 0 && 
-        <AltEndingCarousel data={bookData.altEndings} bookTitle={bookData.title} />
-      }
-      
-      {bookData.faqInsights && bookData.faqInsights.length > 0 && <OracleSection faqInsights={bookData.faqInsights} />}
-      
-      {bookData.litDNA && bookData.litDNA.length > 0 && <LitDNASection bookTitle={bookData.title} litDNA={bookData.litDNA} />}
-      
-      {bookData.relatedWorks && bookData.relatedWorks.length > 0 && <RelatedWorksSection works={bookData.relatedWorks} />}
-      
-      {bookData.inTheWorld && bookData.inTheWorld.length > 0 && 
-        <WorldReferencesSection references={bookData.inTheWorld} bookTitle={bookData.title} />
-      }
-      
-      {bookData.quizQuestions && bookData.quizQuestions.length > 0 && <QuizSection questions={bookData.quizQuestions} />}
-      
-      <FooterCTA />
+    <main className="min-h-screen bg-white">
+      {/* 1. Hero Section */}
+      <section id="hero" className="relative scroll-mt-20">
+        <HeroSection
+          title={bookData.title}
+          author={bookData.author}
+          year={bookData.year}
+          genre={bookData.genre}
+          hook={bookData.hook}
+          coverImage={bookData.coverImage}
+        />
+      </section>
+
+      {/* 2. In The World Section */}
+      {bookData.inTheWorld && bookData.inTheWorld.length > 0 && (
+        <section id="in-the-world" className="py-16 bg-white scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <InTheWorldFeed entries={bookData.inTheWorld} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 3. Reader Realizations Wall */}
+      <section id="reader-realizations" className="py-16 bg-gray-50 scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <ReaderRealizationsWall 
+            data={bookData.readerRealizations || []} 
+            bookTitle={book.title} 
+          />
+        </div>
+      </section>
+
+      {/* 4. Literary Threads from Oracle */}
+      <section id="literary-threads" className="py-16 bg-white scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <LiteraryThreadsFromOracle bookTitle={book.title} bookSlug={book.slug} />
+        </div>
+      </section>
+
+      {/* 5. Theme Map Across Media Section */}
+      {bookData.themeMap && bookData.themeMap.length > 0 && (
+        <section id="theme-map" className="py-16 bg-amber-50 scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <ThemeMapAcrossMedia themeMap={bookData.themeMap} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 6. Summary (TLDR) & Quote Highlights Section */}
+      <section id="summary" className="py-16 bg-white scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <SummarySection summary={bookData.summary} />
+        </div>
+      </section>
+
+      {bookData.quoteHighlights && bookData.quoteHighlights.length > 0 && (
+        <section id="quotes" className="py-16 bg-amber-50 scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <QuoteHighlightGallery data={bookData.quoteHighlights} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 7. LitDNA Section */}
+      {bookData.litDNA && (
+        <section id="litdna" className="py-16 bg-gray-50 scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <LitDNASection litDNA={bookData.litDNA} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 8. Modern Mirror Section */}
+      {bookData.modernMirror && (
+        <section id="modern-mirror" className="py-16 bg-white scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <ModernMirrorSection bookTitle={book.title} modernMirror={bookData.modernMirror} />
+          </div>
+        </section>
+      )}
+
+      {/* 9. Characters Section */}
+      {bookData.characters && (
+        <section id="characters" className="py-16 bg-gray-50 scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <CharactersSection characters={bookData.characters} />
+          </div>
+        </section>
+      )}
+
+      {/* 10. Timeline Section */}
+      {bookData.timeline && (
+        <section id="timeline" className="py-16 bg-white scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <TimelineSection events={bookData.timeline} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 11. Oracle FAQ Insights Section */}
+      <section id="oracle" className="py-16 bg-gray-50 scroll-mt-20">
+        <div className="max-w-5xl mx-auto px-4">
+          <OracleSection faqInsights={bookData.faqInsights || []} />
+        </div>
+      </section>
+
+      {/* 12. Alt Endings Section */}
+      {bookData.altEndings && bookData.altEndings.length > 0 && (
+        <section id="alt-endings" className="py-16 bg-white scroll-mt-20">
+          <div className="max-w-5xl mx-auto px-4">
+            <AltEndingCarousel data={bookData.altEndings} bookTitle={book.title} />
+          </div>
+        </section>
+      )}
+
+      {/* 13. StillHurts & VisualMetaphor would go here */}
+      {/* Add these components when they're created */}
+
+      {/* Floating Chat Button */}
+      <OracleChatButton bookSlug={book.slug} />
     </main>
   );
 } 

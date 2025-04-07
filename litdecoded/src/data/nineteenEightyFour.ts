@@ -366,9 +366,154 @@ const nineteenEightyFourData: BookData = {
       annotation: "In the cold mechanics of power, connection is the first casualty."
     }
   ],
-  readerRealizations: [],
+  readerRealizations: [
+    {
+      text: "I realized I've been watching myself like Big Brother is real.",
+      user: "J.M.",
+      createdAt: "2023-11-15T14:30:00Z"
+    },
+    {
+      text: "After reading this, I noticed how often I censor myself before speaking, not because of government control, but because of social media algorithms.",
+      user: "A.R.",
+      createdAt: "2023-10-28T09:15:00Z"
+    },
+    {
+      text: "The scariest part wasn't the surveillance—it was how willingly the characters accepted it. I see that same acceptance in our world today.",
+      user: "K.L.",
+      createdAt: "2023-12-05T16:45:00Z"
+    },
+    {
+      text: "I never realized how much of my identity is tied to my memories until I imagined them being rewritten.",
+      user: "M.P.",
+      createdAt: "2023-09-12T11:20:00Z"
+    },
+    {
+      text: "The ending broke me. I kept thinking 'surely he'll find a way to resist' but that's exactly what Orwell was warning about—our naive belief that resistance is always possible.",
+      user: "T.W.",
+      createdAt: "2023-11-30T20:10:00Z"
+    }
+  ],
   stillHurts: "",
-  visualMetaphor: ""
+  visualMetaphor: "",
+  
+  themeMap: [
+    {
+      theme: "Surveillance & Privacy",
+      items: [
+        {
+          type: "movie",
+          title: "The Truman Show (1998)",
+          url: "https://en.wikipedia.org/wiki/The_Truman_Show",
+          reason: "Explores how surveillance can create a false reality and manipulate an individual's perception of the world."
+        },
+        {
+          type: "movie",
+          title: "Minority Report (2002)",
+          url: "https://en.wikipedia.org/wiki/Minority_Report_(film)",
+          reason: "Depicts a society where privacy has been sacrificed for security through predictive policing."
+        },
+        {
+          type: "tv",
+          title: "Black Mirror: 'Nosedive'",
+          url: "https://en.wikipedia.org/wiki/Nosedive_(Black_Mirror)",
+          reason: "Shows a society where constant social surveillance and rating creates a dystopian social hierarchy."
+        },
+        {
+          type: "song",
+          title: "Every Breath You Take - The Police",
+          url: "https://open.spotify.com/track/1JSTJqkT5qHq8MDJnJbRE1",
+          reason: "While often misinterpreted as romantic, the lyrics describe obsessive surveillance and control."
+        }
+      ]
+    },
+    {
+      theme: "Propaganda & Truth",
+      items: [
+        {
+          type: "movie",
+          title: "Wag the Dog (1997)",
+          url: "https://en.wikipedia.org/wiki/Wag_the_Dog",
+          reason: "Satirizes how media and government can fabricate events to manipulate public opinion."
+        },
+        {
+          type: "book",
+          title: "Brave New World - Aldous Huxley",
+          url: "https://en.wikipedia.org/wiki/Brave_New_World",
+          reason: "Depicts a society controlled not through fear but through pleasure and distractions, another form of truth manipulation."
+        },
+        {
+          type: "tv",
+          title: "The Handmaid's Tale",
+          url: "https://en.wikipedia.org/wiki/The_Handmaid%27s_Tale_(TV_series)",
+          reason: "Shows how a totalitarian regime uses propaganda and manipulates truth to maintain control."
+        },
+        {
+          type: "song",
+          title: "Land of Confusion - Genesis",
+          url: "https://open.spotify.com/track/1pZTgF6gMLCRlEzVSC7BVH",
+          reason: "Addresses political propaganda and the confusion it creates in understanding truth."
+        }
+      ]
+    },
+    {
+      theme: "Technological Control",
+      items: [
+        {
+          type: "movie",
+          title: "The Matrix (1999)",
+          url: "https://en.wikipedia.org/wiki/The_Matrix",
+          reason: "Explores how technology can be used to control humanity through a completely fabricated reality."
+        },
+        {
+          type: "book",
+          title: "The Circle - Dave Eggers",
+          url: "https://en.wikipedia.org/wiki/The_Circle_(Eggers_novel)",
+          reason: "A modern take on technological surveillance and how it can lead to a totalitarian society."
+        },
+        {
+          type: "tv",
+          title: "Westworld",
+          url: "https://en.wikipedia.org/wiki/Westworld_(TV_series)",
+          reason: "Examines the ethics of technological control over artificial consciousness."
+        },
+        {
+          type: "song",
+          title: "Fitter Happier - Radiohead",
+          url: "https://open.spotify.com/track/0v5AZ28zIpJItFiihDLWAq",
+          reason: "Captures the dehumanizing effect of modern society and technology through a computerized voice."
+        }
+      ]
+    },
+    {
+      theme: "Rebellion & Resistance",
+      items: [
+        {
+          type: "movie",
+          title: "V for Vendetta (2005)",
+          url: "https://en.wikipedia.org/wiki/V_for_Vendetta_(film)",
+          reason: "Depicts resistance against a totalitarian regime through symbolic and direct action."
+        },
+        {
+          type: "book",
+          title: "Fahrenheit 451 - Ray Bradbury",
+          url: "https://en.wikipedia.org/wiki/Fahrenheit_451",
+          reason: "Shows rebellion through the preservation of books in a society that burns them."
+        },
+        {
+          type: "tv",
+          title: "Mr. Robot",
+          url: "https://en.wikipedia.org/wiki/Mr._Robot",
+          reason: "Explores modern resistance against corporate control through hacking and technological means."
+        },
+        {
+          type: "song",
+          title: "Killing In The Name - Rage Against The Machine",
+          url: "https://open.spotify.com/track/59WN2psjkt1tyaxjspN8fp",
+          reason: "An anthem of resistance against institutional control and authoritarianism."
+        }
+      ]
+    }
+  ]
 };
 
 export default nineteenEightyFourData; 

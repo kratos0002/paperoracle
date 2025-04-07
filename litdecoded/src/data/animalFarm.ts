@@ -52,6 +52,16 @@
     answer: string;
     }
 
+    export interface ThemeMapItem {
+    theme: string;
+    items: {
+        type: "book" | "movie" | "tv" | "song";
+        title: string;
+        url: string;
+        reason: string;
+    }[];
+    }
+
     export interface BookData {
     title: string;
     author: string;
@@ -78,6 +88,7 @@
     altEndings?: any[];
     quoteHighlights?: any[];
     readerRealizations?: any[];
+    themeMap?: ThemeMapItem[];
     stillHurts?: string;
     visualMetaphor?: string;
     }
@@ -349,7 +360,8 @@
     quoteHighlights: [],
     readerRealizations: [],
     stillHurts: "",
-    visualMetaphor: ""
+    visualMetaphor: "",
+    themeMap: []
     };
 
     export default animalFarmData; 
